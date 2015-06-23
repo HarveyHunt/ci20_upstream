@@ -223,6 +223,4 @@ extern int jz4780_cgu_start_ehci(void);
  */
 extern void jz4780_cgu_stop_ehci(void);
 
-extern int jz4780_cgu_start_ehci(void);
-
 #endif /* __MIPS_ASM_MACH_JZ4780_JZ4780_CGU_H__ */
