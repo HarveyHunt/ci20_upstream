@@ -154,6 +154,13 @@ static int jz4740_ohci_probe(struct platform_device *pdev)
 	struct resource *res;
 	int irq;
 
+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+
+	if (!res) {
+		dev_err(&pdev->dev, "Failed to get platform resource\n");
+		return -ENOENT;
+	}
+
 	irq = platform_get_irq(pdev, 0);
 	if (irq < 0) {
 		dev_err(&pdev->dev, "Failed to get platform irq\n");
@@ -168,14 +175,14 @@ static int jz4740_ohci_probe(struct platform_device *pdev)
 
 	jz4740_ohci = hcd_to_jz4740_hcd(hcd);
 
-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	hcd->rsrc_start = res->start;
+	hcd->rsrc_len = resource_size(res);
+
 	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
 	if (IS_ERR(hcd->regs)) {
 		ret = PTR_ERR(hcd->regs);
 		goto err_free;
 	}
-	hcd->rsrc_start = res->start;
-	hcd->rsrc_len = resource_size(res);
 
 	jz4740_ohci->clk = devm_clk_get(&pdev->dev, "uhc");
 	if (IS_ERR(jz4740_ohci->clk)) {
@@ -188,7 +195,6 @@ static int jz4740_ohci_probe(struct platform_device *pdev)
 	if (IS_ERR(jz4740_ohci->vbus))
 		jz4740_ohci->vbus = NULL;
 
-
 	clk_set_rate(jz4740_ohci->clk, 48000000);
 	clk_prepare_enable(jz4740_ohci->clk);
 	if (jz4740_ohci->vbus)
@@ -197,7 +203,7 @@ static int jz4740_ohci_probe(struct platform_device *pdev)
 	if (of_machine_is_compatible("ingenic,jz4780-ohci")) {
 		ret = jz4780_cgu_set_usb_suspend(USB_PORT_HOST, false);
 		if (ret) {
-			dev_err(&pdev->dev, "failed to unsuspend port\n");
+			dev_err(&pdev->dev, "Failed to unsuspend port\n");
 			goto err_disable;
 		}
 	}
@@ -227,7 +233,8 @@ err_free:
 }
 
 static struct of_device_id jz4740_ohci_of_match[] = {
-	{ .compatible = "ingenic, jz4740-ohci", },
+	{ .compatible = "ingenic,jz4740-ohci", },
+	{ .compatible = "ingenic,jz4780-ohci", },
 	{ },
 };
 
@@ -258,3 +265,4 @@ static struct platform_driver ohci_hcd_jz4740_driver = {
 };
 
 MODULE_ALIAS("platform:jz4740-ohci");
+MODULE_DEVICE_TABLE(of, jz4740_ohci_of_match);
