@@ -217,6 +217,11 @@ err_free:
 	return ret;
 }
 
+static struct of_device_id jz4740_ohci_of_match[] = {
+	{ .compatible = "ingenic, jz4740-ohci", },
+	{ },
+};
+
 static int jz4740_ohci_remove(struct platform_device *pdev)
 {
 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
@@ -239,6 +244,7 @@ static struct platform_driver ohci_hcd_jz4740_driver = {
 	.remove = jz4740_ohci_remove,
 	.driver = {
 		.name = "jz4740-ohci",
+		.of_match_table = jz4740_ohci_of_match,
 	},
 };
 
