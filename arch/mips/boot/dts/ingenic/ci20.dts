@@ -1,5 +1,6 @@
 /dts-v1/;
 
+#include <dt-bindings/gpio/gpio.h>
 #include "jz4780.dtsi"
 
 / {
@@ -25,6 +26,14 @@
 
 &ext {
 	clock-frequency = <48000000>;
+};
+
+&ehci {
+    ingenic,vbus-gpio = <&gpf 15 0>;
+};
+
+&ohci {
+    ingenic,vbus-gpio = <&gpf 15 0>;
 };
 
 &uart0 {
