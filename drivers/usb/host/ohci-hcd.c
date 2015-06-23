@@ -690,7 +690,7 @@ int ohci_setup(struct usb_hcd *hcd)
 	struct ohci_hcd		*ohci = hcd_to_ohci(hcd);
 
 	ohci_hcd_init(ohci);
-	
+
 	return ohci_init(ohci);
 }
 EXPORT_SYMBOL_GPL(ohci_setup);
@@ -1244,7 +1244,7 @@ MODULE_LICENSE ("GPL");
 #define TMIO_OHCI_DRIVER	ohci_hcd_tmio_driver
 #endif
 
-#ifdef CONFIG_MACH_JZ4740
+#if defined(CONFIG_MACH_JZ4740) || defined(CONFIG_MACH_JZ4780)
 #include "ohci-jz4740.c"
 #define PLATFORM_DRIVER	ohci_hcd_jz4740_driver
 #endif
