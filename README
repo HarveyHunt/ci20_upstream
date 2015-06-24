@@ -1,3 +1,26 @@
+================
+Changes that have been made:
+- OHCI driver has been ported from 3.18 (untested, but should be fine as not much has changed in the kernel).
+- CGU driver has been ported from 3.18 (untested as OHCI/EHCI are the main users of is).
+- Pinctrl driver compiles but doesn't want to probe (this is going to be rewritten later anyway).
+
+TODO:
+- Port DWC2 platform driver:
+        - It seems that having a platform driver just for the JZ4780 isn't the correct method.
+        - Waiting on pinctrl driver.
+- Port EHCI driver (with fixes):
+        - Waiting on pinctrl for this.
+        - Minimal change in the kernel, so should be easy.
+- Update DT to support the new features.
+- Neaten commits:
+        - Some smaller commits need squashing.
+        - Commits need rearranging.
+        - Authorship needs correcting.
+================
+
+
+
+
         Linux kernel release 4.x <http://kernel.org/>
 
 These are the release notes for Linux version 4.  Read them carefully,
