@@ -645,7 +645,7 @@ static int jz4780_pinctrl_parse_dt_pincfg(struct jz4780_pinctrl *jzpc,
 	if (!cfg_node)
 		return -EINVAL;
 
-	err = pinconf_generic_parse_dt_config(cfg_node, &configs,
+	err = pinconf_generic_parse_dt_config(cfg_node, jzpc->pctl, &configs,
 			&num_configs);
 	if (err)
 		return err;
@@ -764,6 +764,8 @@ static int jz4780_pinctrl_probe(struct platform_device *pdev)
 	struct device_node *np, *group_node;
 	unsigned i, j;
 	int err;
+
+	pr_err("***** Loaded pinctrl driver\n");
 
 	if (!dev->of_node) {
 		dev_err(dev, "device tree node not found\n");
